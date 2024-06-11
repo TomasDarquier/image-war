@@ -1,0 +1,44 @@
+services:
+
+  postgres_users:
+    container_name: postgres_users
+    image: postgres:14-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=image_war_users
+    volumes:
+      - users_data:/var/lib/postgresql/data
+      - ./db_init/init_postgres_users.sql:/docker-entrypoint-initdb.d/init_postgres_users.sql
+    restart: always
+    networks:
+      - image_war_nwrk
+
+  postgres_images:
+    container_name: postgres_images
+    image: postgres:14-alpine
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=image_war_images
+    volumes:
+      - images_data:/var/lib/postgresql/data
+      - ./db_init/init_postgres_images.sql:/docker-entrypoint-initdb.d/init_postgres_images.sql
+    restart: always
+    networks:
+      - image_war_nwrk
+
+
+volumes:
+  
+  users_data:
+    name: users_data
+
+  images_data:
+    name: images_data
+
+networks:
+  image_war_nwrk:
+    name: image_war_nwrk
