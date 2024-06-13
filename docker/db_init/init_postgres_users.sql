@@ -1,5 +1,3 @@
--- init_postgres_users
-
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     google_id VARCHAR(255) NOT NULL,

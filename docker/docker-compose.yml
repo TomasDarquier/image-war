@@ -30,6 +30,21 @@ services:
     networks:
       - image_war_nwrk
 
+  postgres_votes:
+    container_name: postgres_votes
+    image: postgres:14-alpine
+    ports:
+      - "5435:5432"
+    enviroment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=image_war_votes
+    volumes:
+      - votes_data:/var/lib/postgresql/data
+      - ./db_init/init_postgres_images.sql:/docker-entrypoint-initdb.d/init_postgres_votes.sql
+    restart: always
+    networks:
+      - image_war_nwrk
+ 
 
 volumes:
   
@@ -38,6 +53,9 @@ volumes:
 
   images_data:
     name: images_data
+
+  votes_data:
+    name: votes_data
 
 networks:
   image_war_nwrk:
