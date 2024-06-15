@@ -35,7 +35,7 @@ services:
     image: postgres:14-alpine
     ports:
       - "5435:5432"
-    enviroment:
+    environment:
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=image_war_votes
     volumes:
