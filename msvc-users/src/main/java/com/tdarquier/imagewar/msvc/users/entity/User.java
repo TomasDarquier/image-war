@@ -8,6 +8,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "users")
@@ -18,19 +24,28 @@ public class User {
     private Integer id;
 
     @Column(name = "google_id")
+    @NotBlank
     private String googleId;
 
+    @Email
+    @NotBlank
     private String email;
 
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String username;
 
     @Column(name = "profile_picture_url")
     private String profilePictureUrl;
 
     @Column(name = "created_at")
+    @Past
+    @NotBlank
     private Date createdAt;
 
     @Column(name = "votes_done")
+    @Min(value = 0)
+    @NotNull
     private Integer votesDone;
 
     public Integer getId() {

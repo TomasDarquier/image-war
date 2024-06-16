@@ -55,4 +55,7 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/users/byUsername/{username}", "FakeUser"))
         .andExpect(status().isNotFound());
     }
+
+
+    // TO DO: delete test
 }
