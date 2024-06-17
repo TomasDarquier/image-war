@@ -22,28 +22,40 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void createUser(User user) {
+    public boolean createUser(User user) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'createUser'");
     }
 
     @Override
-    public void addVote(User user) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'addVote'");
+    @Transactional
+    public boolean addVote(User user) {
+
+        if(!userIsConsistent(user)){
+            return false;
+        }
+
+        User validUser = user; 
+        validUser.setVotesDone(validUser.getVotesDone() + 1);
+        userRepository.save(validUser);
+        
+        return true;
     }
 
     @Override
     @Transactional
     public boolean updateUsername(User user, String newUsername) {
-        //check if the username is available
-        if(userRepository.findByUsername(newUsername).isPresent()){
+
+        if(!userIsConsistent(user) ||
+            getUserByUsername(newUsername).isPresent() ||
+            user.isChangedUsername()){
             return false;
         }
 
-        User updatedUsername = user;
-        updatedUsername.setUsername(newUsername);
-        userRepository.save(updatedUsername);
+        User validUser = user;
+        validUser.setUsername(newUsername);
+        validUser.setChangedUsername(true);
+        userRepository.save(validUser);
         return true;
     }
 
@@ -51,14 +63,23 @@ public class UserServiceImpl implements UserService{
     @Transactional
     public boolean deleteUser(User user) {
 
-        //for security reasons all the user atributes are checked to be ok
-        Optional<User> userToDelete = userRepository.findById(user.getId());
-        if(userToDelete.isPresent() && userToDelete.get().equals(user)){
-            userRepository.delete(user);
-            return true;
+        if(!userIsConsistent(user)){
+            return false;
         }
 
-        return false;    
+        userRepository.delete(user);
+        return true;    
+    }
+
+
+    private boolean userIsConsistent(User user) {
+
+        Optional<User> userFromDb = userRepository.findByUsername(user.getUsername());
+        if (userFromDb.isEmpty()) {
+            return false;
+        }
+
+        return user.equals(userFromDb.get());
     }
 
 }

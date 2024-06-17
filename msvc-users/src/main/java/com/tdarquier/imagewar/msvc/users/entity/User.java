@@ -1,6 +1,9 @@
 package com.tdarquier.imagewar.msvc.users.entity;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,14 +42,29 @@ public class User {
     private String profilePictureUrl;
 
     @Column(name = "created_at")
-    @Past
-    @NotBlank
     private Date createdAt;
 
     @Column(name = "votes_done")
     @Min(value = 0)
     @NotNull
     private Integer votesDone;
+
+    @Column(name = "changed_username")
+    private boolean changedUsername;
+
+    public User() {
+    }
+
+    public User(@NotBlank String googleId, @Email @NotBlank String email,
+            @NotBlank @Size(min = 1, max = 255) String username, String profilePictureUrl,
+            @Past @NotBlank Date createdAt, @Min(0) @NotNull Integer votesDone) {
+        this.googleId = googleId;
+        this.email = email;
+        this.username = username;
+        this.profilePictureUrl = profilePictureUrl;
+        this.createdAt = createdAt;
+        this.votesDone = votesDone;
+    }
 
     public Integer getId() {
         return id;
@@ -104,5 +122,48 @@ public class User {
         this.votesDone = votesDone;
     }
 
+    public boolean isChangedUsername() {
+        return changedUsername;
+    }
+
+    public void setChangedUsername(boolean changedUsername) {
+        this.changedUsername = changedUsername;
+    }
+
+
     
+    public static boolean compareDates(Instant date1, Instant date2) {
+        if (date1 == null && date2 == null) {
+            return true;
+        } else if (date1 == null || date2 == null) {
+            return false;
+        } else {
+            return date1.truncatedTo(ChronoUnit.DAYS).equals(date2.truncatedTo(ChronoUnit.DAYS));
+        }
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        User other = (User) obj;
+        return Objects.equals(id, other.id) &&
+                Objects.equals(googleId, other.googleId) &&
+                Objects.equals(email, other.email) &&
+                Objects.equals(username, other.username) &&
+                Objects.equals(profilePictureUrl, other.profilePictureUrl) &&
+                compareDates(createdAt.toInstant(), other.createdAt.toInstant()) &&
+                Objects.equals(votesDone, other.votesDone) &&
+                Objects.equals(changedUsername, other.changedUsername);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, googleId, email, username, profilePictureUrl, createdAt, votesDone, changedUsername);
+    }
+
+    
+
 }

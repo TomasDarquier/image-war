@@ -8,9 +8,9 @@ public interface UserService {
 
     Optional<User> getUserByUsername(String username);
 
-    void createUser(User user);
+    boolean createUser(User user);
 
-    void addVote(User user);
+    boolean addVote(User user);
 
     boolean updateUsername(User user, String newUsername);
 

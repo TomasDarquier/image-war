@@ -1,4 +1,4 @@
-INSERT INTO users (google_id, email, username, profile_picture_url, votes_done) VALUES
+INSERT INTO users (google_id, email, username, profile_picture_url,votes_done) VALUES
 ('google_1', 'john.doe@example.com', 'johndoe', 'http://example.com/johndoe.jpg', 311),
 ('google_2', 'jane.smith@example.com', 'janesmith', 'http://example.com/janesmith.jpg', 0),
 ('google_3', 'mike.jones@example.com', 'mikejones', 'http://example.com/mikejones.jpg', 7),

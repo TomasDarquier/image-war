@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL,
     profile_picture_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    votes_done INT DEFAULT 0
+    votes_done INT DEFAULT 0,
+    changed_username BOOLEAN DEFAULT FALSE 
 
 );
