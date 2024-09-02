@@ -1,2 +1,2 @@
 # image_war
-Tomas Darquier portfolio project.
+Portfolio project.
